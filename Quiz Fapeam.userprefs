@@ -1,0 +1,15 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\temaJogo.cs">
+    <Files>
+      <File FileName="Assets\Scripts\responder.cs" Line="172" Column="4" />
+      <File FileName="Assets\Scripts\notaFinal.cs" Line="33" Column="21" />
+      <File FileName="Assets\Scripts\temaInfo.cs" Line="15" Column="17" />
+      <File FileName="Assets\Scripts\temaJogo.cs" Line="12" Column="29" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
