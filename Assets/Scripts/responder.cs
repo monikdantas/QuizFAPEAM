@@ -18,6 +18,8 @@ public class responder : MonoBehaviour {
 	public string[] alternativas;
 	public string[] corretas;
 
+
+
 	private int idPergunta;
 	private float acertos;
 	private float questoes;
@@ -26,6 +28,7 @@ public class responder : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+	
 		idTema = PlayerPrefs.GetInt ("idTema");
 		idPergunta = 0;
 		questoes = perguntas.Length;
@@ -87,19 +90,21 @@ public class responder : MonoBehaviour {
 		infoRespostas.text = "Respondendo " + (idPergunta + 1).ToString() + " de " + questoes.ToString() + " perguntas.";
 	}
 
-	//GUIStyle style;
-	public void resposta(Text alternativa){
-	
-		//Debug.Log ( alternativa.gameObject.GetComponent<Text>().text);
+    //GUIStyle style;
 
-		//Debug.Log ( corretas[idPergunta]);
-		if(alternativa.gameObject.GetComponent<Text>().text == corretas[idPergunta]){
+ 
+    public void resposta(Text alternativa){
+
+		if (alternativa.gameObject.GetComponent<Text> ().text == corretas [idPergunta]) {
+
 			acertos += 1;
-		}
-		alternativa.gameObject.GetComponent<Text>().color = Color.magenta;
-		//style.normal.textColor = Color.red;
-	//	GUI.contentColor = Color.red;
-	//	proximaPergunta();
+		} else {
+
+            Application.LoadLevel("telaErro");
+
+
+        }
+		proximaPergunta();
 	}
 
 	void proximaPergunta(){
