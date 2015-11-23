@@ -5,6 +5,7 @@ using System.Collections;
 public class temaJogo : MonoBehaviour {
 
     public Button btnPlay;
+	public Button[] btnTema;
     public Text txtNomeTema;
     public GameObject infoTema;
     public Text txtInfoTema;
@@ -17,7 +18,6 @@ public class temaJogo : MonoBehaviour {
 	private int idTema;
 
 
-
 	// Use this for initialization
 	void Start () {
 		idTema = 0;
@@ -28,6 +28,24 @@ public class temaJogo : MonoBehaviour {
 		estrela2.SetActive (false);
 		estrela3.SetActive (false);
 		btnPlay.interactable = false;
+	
+		int contador_todos = 0;
+
+		for (int j=1; j < 7; j++) {
+			int contador_tema = 0;
+			for (int i=0; i < 6; i++) {
+				if (PlayerPrefs.GetInt ("acertosPerg" + j.ToString () + i.ToString ()) == 1) {
+					contador_tema++;
+				}
+			}
+			if (contador_tema == 6) {
+				contador_todos++;
+				btnTema[j-1].interactable = false;
+			}
+		}
+		if (contador_todos == 6){
+			Application.LoadLevel ("telaFinal");
+		}
 	
 	}
 
@@ -51,7 +69,7 @@ public class temaJogo : MonoBehaviour {
 			estrela1.SetActive (true);
 			estrela2.SetActive (true);
 			estrela3.SetActive (false);
-		} else if (notaFinal >= 5) {
+		} else if (notaFinal >= 3) {
 			estrela1.SetActive (true);
 			estrela2.SetActive (false);
 			estrela3.SetActive (false);

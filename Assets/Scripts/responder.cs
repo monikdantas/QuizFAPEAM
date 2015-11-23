@@ -12,14 +12,13 @@ public class responder : MonoBehaviour {
 	public Text respostaC;
 	public Text respostaD;
 	public Text respostaE;
-	public Text infoRespostas;
 
 	public string[] perguntas;
 	public string[] alternativas;
 	public string[] corretas;
 
-
-
+	private string[] perguntas_respondidas = new string[6];
+	private int contador_respondidas = 0;
 	private int idPergunta;
 	private float acertos;
 	private float questoes;
@@ -28,115 +27,79 @@ public class responder : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
 		idTema = PlayerPrefs.GetInt ("idTema");
 		idPergunta = 0;
 		questoes = perguntas.Length;
-		
-		string amostra;
-		int aux = 1;
 
-		string[] alternativas_pergunta = new string[5];
-		string[] alternativas_final = new string[5];
-
-		alternativas_pergunta[0] = corretas[idPergunta];
-
-
-		for (int i=0 ; aux < 5; i++){
-			int cont = 0;
-			amostra = alternativas[Random.Range(0, 64)]; // Um numero a mais do tamanho do array
-			//print (i+" - "+amostra+" - "+aux);
-			for(int j =0 ; j < aux; j++){
-				if (amostra == alternativas_pergunta[j]){
-				//	print("Repetido");
-					cont++;
-				}
-			}
-		
-			if (cont == 0){
-				alternativas_pergunta[aux] = amostra;
-				print("Inseriu "+ alternativas_pergunta[aux]);
-				aux++;
-			}
-		}
-
-		aux = 0;
-		int amostra2;
-
-		for(int k=0 ; aux < 5; k++){
-			int cont = 0;
-			amostra2 = Random.Range(0, 5); // Um numero a mais do tamanho do array
-		//	print (k+" - "+amostra2+" - "+aux);
-		//	print (alternativas_final[amostra2]);
-
-			if (alternativas_final[amostra2] != null){
-			//	print("Repetido");
-				cont++;
-			}
-		
-			if (cont == 0){
-				alternativas_final[amostra2] = alternativas_pergunta[aux];
-				aux++;
-			}
-		}
-
-		pergunta.text = perguntas [idPergunta];
-		respostaA.text = alternativas_final [0];
-		respostaB.text = alternativas_final [1];
-		respostaC.text = alternativas_final [2];
-		respostaD.text = alternativas_final [3]; 
-		respostaE.text = alternativas_final [4]; 
-
-		infoRespostas.text = "Respondendo " + (idPergunta + 1).ToString() + " de " + questoes.ToString() + " perguntas.";
-	}
-
-    //GUIStyle style;
-
- 
-    public void resposta(Text alternativa){
-
-		if (alternativa.gameObject.GetComponent<Text> ().text == corretas [idPergunta]) {
-
-			acertos += 1;
-		} else {
-
-            Application.LoadLevel("telaErro");
-
-
-        }
 		proximaPergunta();
 	}
 
+
 	void proximaPergunta(){
-		idPergunta ++;
+		//idPergunta ++;
+		int inicio = 0;
+		int termino = 0;
+		int idAl;
+		int verificador = 1;
+		string amostra;
+		int aux = 1;
+		int ind = 0;
+		int comparar = 0;
+		
+		string[] alternativas_pergunta = new string[5];
+		string[] alternativas_final = new string[5];
+		string[] alternativas_especificas = new string[4];
 
-		if (idPergunta <= (questoes - 1)) {
+		int[] idAleatorio = new int[] {0,1,2,3,4,5};
+		
+		while(verificador == 1){
+			idAl = idAleatorio[Random.Range(0, 6)];
 
-			string amostra;
-			int aux = 1;
-			
-			string[] alternativas_pergunta = new string[5];
-			string[] alternativas_final = new string[5];
-			
-			alternativas_pergunta[0] = corretas[idPergunta];
+			idPergunta = idAl;
 
-			print ("______________________________");
+		//	print (PlayerPrefs.GetInt("acertosPerg"+idTema.ToString()+idAl.ToString()));
+
+			if ((PlayerPrefs.GetInt("acertosPerg"+idTema.ToString()+idAl.ToString()))==1){
+				verificador = 1;
+				int contador = 0;
+				for(int i=0; i < 6; i++){
+					if(PlayerPrefs.GetInt("acertosPerg"+idTema.ToString()+i.ToString()) == 1){
+						contador++;
+					}
+				}
+				if (contador == 6){
+					break;
+				}
+			}else{
+				verificador = 0;
+			}
+		//	print ("Passou");
+		}
+		
+		inicio = (idPergunta * 3) + idPergunta;
+		termino = inicio +3;
+
+		if (verificador == 0) {
+
+			for (int i = inicio; i <= termino; i++) {
+				alternativas_especificas [ind] = alternativas [i];
+				ind++;
+			}
 			
-			for (int i=0 ; aux < 5; i++){
+			alternativas_pergunta [0] = corretas [idPergunta];
+
+			for (int i=0; aux < 5; i++) {
 				int cont = 0;
-				amostra = alternativas[Random.Range(0, 64)]; // Um numero a mais do tamanho do array
-				//print (i+" - "+amostra+" - "+aux);
-				for(int j =0 ; j < aux; j++){
-					if (amostra == alternativas_pergunta[j]){
-						//	print("Repetido");
+
+				amostra = alternativas_especificas [Random.Range (0, 4)]; // Um numero a mais do tamanho do array
+				for (int j =0; j < aux; j++) {
+					if (amostra == alternativas_pergunta [j]) {
 						cont++;
 					}
 				}
 				
-				if (cont == 0){
-					alternativas_pergunta[aux] = amostra;
-					print("Inseriu "+ alternativas_pergunta[aux]);
-					//print("Inseriu "+ alternativas_pergunta[aux]);
+				if (cont == 0) {
+					alternativas_pergunta [aux] = amostra;
 					aux++;
 				}
 			}
@@ -144,20 +107,15 @@ public class responder : MonoBehaviour {
 			aux = 0;
 			int amostra2;
 			
-			for(int k=0 ; aux < 5; k++){
+			for (int k=0; aux < 5; k++) {
 				int cont = 0;
-				amostra2 = Random.Range(0, 5); // Um numero a mais do tamanho do array
-				//	print (k+" - "+amostra2+" - "+aux);
-				//	print (alternativas_final[amostra2]);
-				
-				if (alternativas_final[amostra2] != null){
-					//	print("Repetido");
+				amostra2 = Random.Range (0, 5); // Um numero a mais do tamanho do array
+
+				if (alternativas_final [amostra2] != null) {
 					cont++;
 				}
-				
-				if (cont == 0){
-					alternativas_final[amostra2] = alternativas_pergunta[aux];
-					//print("Inseriu"+ alternativas_pergunta[aux]);
+				if (cont == 0) {
+					alternativas_final [amostra2] = alternativas_pergunta [aux];
 					aux++;
 				}
 			}
@@ -169,24 +127,41 @@ public class responder : MonoBehaviour {
 			respostaD.text = alternativas_final [3]; 
 			respostaE.text = alternativas_final [4]; 
 		
-			infoRespostas.text = "Respondendo " + (idPergunta + 1).ToString () + " de " + questoes.ToString () + " perguntas.";
-		} else {
+		}else {
+			Application.LoadLevel("temas");
+			//Application.LoadLevel("notaFinal");	 
 
+		
+		}
+	}
+
+
+	public void resposta(Text alternativa){
+		if (alternativa.gameObject.GetComponent<Text> ().text == corretas [idPergunta]) {
+
+			PlayerPrefs.SetInt("acertosPerg"+idTema.ToString()+idPergunta.ToString(),1);
+
+			acertos = PlayerPrefs.GetInt ("acertos" + idTema.ToString ()) + 1;;
+
+			print("Salvo -> "+PlayerPrefs.GetInt("acertosPerg"+idTema.ToString()));
+			print("Acertos -> "+acertos);
 			media = 10 * (acertos/questoes);
 			notaFinal = Mathf.RoundToInt(media); // Calcula a media com base no percentual de acertos
-			print (notaFinal);
+			print ("nota "+notaFinal);
+		
 			if(notaFinal > PlayerPrefs.GetInt("notaFinal"+idTema.ToString())){
 				PlayerPrefs.SetInt("notaFinal"+idTema.ToString(),notaFinal);
 				PlayerPrefs.SetInt("acertos"+idTema.ToString(),(int)acertos);
 			}
-
+			
 			PlayerPrefs.SetInt("notaFinalTemp"+idTema.ToString(),notaFinal);
 			PlayerPrefs.SetInt("acertosTemp"+idTema.ToString(),(int)acertos);
 
-			Application.LoadLevel("notaFinal");	 // Arredonda a media
-		
+			Application.LoadLevel("telaSucesso");
+		//	contador_respondidas ++;
+		} else {
+			Application.LoadLevel("telaErro");
 		}
-	
+		//proximaPergunta();
 	}
-
 }
